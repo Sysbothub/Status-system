@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Status Dashboard</title>
+    <style>
+        :root { --primary: #6366f1; --bg: #f8fafc; --text: #1e293b; --green: #10b981; --orange: #f59e0b; --red: #ef4444; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 40px 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .full { grid-column: 1 / -1; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-bottom: 12px; }
+        .green { background: #dcfce7; color: #166534; }
+        .orange { background: #fef3c7; color: #92400e; }
+        .red { background: #fee2e2; color: #991b1b; }
+        .note { background: #f1f5f9; padding: 10px; border-radius: 8px; font-size: 0.9rem; margin-top: 10px; border-left: 4px solid var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>System Status</h1>
+            <p>Live operational updates for Miraidon and Professor Mable</p>
+        </header>
+        <div class="grid">
+            <% ['miraidon', 'mable'].forEach(name => { 
+                const s = status[name] || { state: 'Offline', queueState: 'N/A', note: '' };
+                let color = s.state === 'Fully Operational' ? 'green' : (s.state === 'Offline' ? 'red' : 'orange');
+            %>
+                <div class="card">
+                    <div class="badge <%= color %>"><%= s.state %></div>
+                    <h2 style="margin:0"><%= name.charAt(0).toUpperCase() + name.slice(1) %> Bot</h2>
+                    <p style="color:#64748b; font-size: 0.9rem;">Queue: <%= s.queueState %></p>
+                    <% if(s.note) { %><div class="note"><%= s.note %></div><% } %>
+                </div>
+            <% }) %>
+
+            <% const dm = status['dm_support'] || { state: 'Offline', note: '' }; 
+               let dmColor = dm.state.includes('actively') ? 'green' : (dm.state === 'Offline' ? 'red' : 'orange');
+            %>
+            <div class="card full">
+                <div class="badge <%= dmColor %>"><%= dm.state %></div>
+                <h2 style="margin:0">Direct Message Support</h2>
+                <% if(dm.note) { %><div class="note"><strong>Update:</strong> <%= dm.note %></div><% } %>
+            </div>
+        </div>
+        <p style="text-align:center; margin-top:30px;"><a href="/login" style="color:var(--primary); text-decoration:none;">Staff Login</a></p>
+    </div>
+</body>
+</html>
