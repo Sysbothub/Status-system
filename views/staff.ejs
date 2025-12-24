@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Control</title>
+    <style>
+        body { font-family: sans-serif; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; padding: 50px; }
+        .box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 400px; }
+        select, textarea, button { width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 6px; border: 1px solid #ddd; }
+        button { background: #6366f1; color: white; border: none; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Update Service</h2>
+        <form action="/staff/update" method="POST">
+            <label>Service:</label>
+            <select name="service" id="svc" onchange="toggle()">
+                <option value="miraidon">Miraidon</option>
+                <option value="mable">Professor Mable</option>
+                <option value="dm_support">DM Support</option>
+            </select>
+
+            <label>Status:</label>
+            <select name="state" id="st"></select>
+
+            <div id="q">
+                <label>Queue Speed:</label>
+                <select name="queueState">
+                    <option value="Fast queue (Not that busy)">Fast queue</option>
+                    <option value="Moving slow (Lots of people using the bot.)">Moving slow</option>
+                </select>
+            </div>
+
+            <label>Note:</label>
+            <textarea name="note" placeholder="Add a public note..."></textarea>
+            <button type="submit">Publish Update</button>
+        </form>
+        <a href="/" style="font-size: 0.8rem; color: #666;">View Site</a> | <a href="/logout" style="font-size: 0.8rem; color: #666;">Logout</a>
+    </div>
+
+    <script>
+        function toggle() {
+            const s = document.getElementById('svc').value;
+            const st = document.getElementById('st');
+            const q = document.getElementById('q');
+            st.innerHTML = '';
+            if(s === 'dm_support') {
+                q.style.display = 'none';
+                ['Operational (staff actively viewing messages)', 'Operational (Staff away from desk)', 'Offline'].forEach(o => st.innerHTML += `<option>${o}</option>`);
+            } else {
+                q.style.display = 'block';
+                ['Fully Operational', 'Under Maintenance', 'Offline'].forEach(o => st.innerHTML += `<option>${o}</option>`);
+            }
+        }
+        toggle();
+    </script>
+</body>
+</html>
