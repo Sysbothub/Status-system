@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><title>Admin Panel</title></head>
+<body style="font-family: sans-serif; padding: 40px; background: #f8fafc;">
+    <div style="max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 10px;">
+        <h2>User Management</h2>
+        <form action="/admin/create" method="POST">
+            <input name="username" placeholder="Username" required style="padding:8px;">
+            <input name="password" type="password" placeholder="Password" required style="padding:8px;">
+            <select name="role"><option value="staff">Staff</option><option value="admin">Admin</option></select>
+            <button type="submit">Create User</button>
+        </form>
+        <hr>
+        <h3>Existing Accounts</h3>
+        <% users.forEach(u => { %>
+            <div style="display:flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                <span><%= u.username %> (<%= u.role %>)</span>
+                <% if(u.username !== 'admin') { %>
+                    <form action="/admin/delete" method="POST">
+                        <input type="hidden" name="userId" value="<%= u._id %>">
+                        <button style="color:red; border:none; background:none; cursor:pointer;">Delete</button>
+                    </form>
+                <% } %>
+            </div>
+        <% }) %>
+        <br><a href="/staff">Back to Staff Panel</a>
+    </div>
+</body>
+</html>
